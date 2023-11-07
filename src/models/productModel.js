@@ -22,17 +22,29 @@ const productSchema = new mongoose.Schema(
 			trim: true,
 			required: [true, 'Please provide a product description.'],
 		},
+		images: [
+			{
+				public_id: {
+					type: String,
+					required: true,
+				},
+				url: {
+					type: String,
+					required: true,
+				},
+			},
+		],
 		category: {
 			type: mongoose.Types.ObjectId,
 			ref: 'Category',
 		},
-		color: [
+		colors: [
 			{
 				type: mongoose.Types.ObjectId,
 				ref: 'Color',
 			},
 		],
-		size: [
+		sizes: [
 			{
 				type: mongoose.types.ObjectId,
 				ref: 'Size',
