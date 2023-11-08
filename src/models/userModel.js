@@ -111,6 +111,16 @@ userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
 userSchema.methods.isPasswordCorrect = async function (candidatePassword) {
 	return await bcrypt.compare(candidatePassword, this.password);
 };
+userSchema.methods.passwordChangeAfter = function (jwtTimestamp) {
+	if (this.passwordChangedAt) {
+		const changedTimestamp = parseInt(
+			this.passwordChangedAt.getTime() / 1000,
+			10,
+		);
+		return jwtTimestamp < changedTimestamp;
+	}
+	return false;
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

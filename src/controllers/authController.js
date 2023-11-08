@@ -35,11 +35,6 @@ const register = catchAsync(async (req, res, next) => {
 		password,
 	});
 
-	if (!user)
-		return next(
-			new AppError('Something went very wrong when registering user!', 500),
-		);
-
 	sendToken(req, res, { accessToken, refreshToken });
 
 	res
@@ -53,22 +48,16 @@ const register = catchAsync(async (req, res, next) => {
 });
 
 const login = catchAsync(async (req, res, next) => {
-	const { name, email, password } = req.body;
+	const { email, password } = req.body;
 
 	if (!email || !password)
 		return next(new AppError('Email and password are required .'));
 
 	const { user, accessToken, refreshToken } = await authService.login({
-		name,
 		email,
 		password,
 	});
 
-	if (!user)
-		return next(
-			new AppError('Something went very wrong when log in user!', 500),
-		);
-	console.log(user);
 	sendToken(req, res, { accessToken, refreshToken });
 
 	res
@@ -80,8 +69,32 @@ const login = catchAsync(async (req, res, next) => {
 			),
 		);
 });
+const logout = catchAsync(async (req, res, next) => {
+	let token;
+	const { refreshToken } = req.body;
+	const userId = req.user._id;
+	token = refreshToken || req.cookies.refreshToken;
+
+	if (!token) return next(new AppError('Refresh token is required', 400));
+
+	const user = await authService.logout({ userId, token });
+
+	if (!user) return new AppError('Invalid refresh token or user not found');
+
+	const options = {
+		httpOnly: true,
+		secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+	};
+
+	res
+		.status(200)
+		.clearCookie('accessToken', options)
+		.clearCookie('refreshToken', options)
+		.json(new ApiResponse({}, 'User successfully logout'));
+});
 
 module.exports = {
 	register,
 	login,
+	logout,
 };

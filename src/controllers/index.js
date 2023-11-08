@@ -1,8 +1,9 @@
-const { register, login } = require('./authController');
+const { register, login, logout } = require('./authController');
 
 const authController = {
 	register,
 	login,
+	logout,
 };
 
 module.exports = {

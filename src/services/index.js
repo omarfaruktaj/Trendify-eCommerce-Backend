@@ -6,7 +6,7 @@ const {
 	updateUserById,
 } = require('./userService');
 
-const { register, login } = require('./authService');
+const { register, login, logout } = require('./authService');
 
 const userService = {
 	createUser,
@@ -18,6 +18,7 @@ const userService = {
 const authService = {
 	register,
 	login,
+	logout,
 };
 
 module.exports = {

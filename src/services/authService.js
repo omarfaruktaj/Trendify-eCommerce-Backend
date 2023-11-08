@@ -23,18 +23,18 @@ const register = catchAsync(async ({ name, email, password }) => {
 
 	const { accessToken, refreshToken } = signAccessAndRefreshToken(user._id);
 
-	const updatedUser = await updateUserById(user._id, {
+	await updateUserById(user._id, {
 		$push: { refreshToken },
 	});
 
 	return {
 		user: {
-			_id: updatedUser._id,
-			name: updatedUser.name,
-			email: updatedUser.email,
-			role: updatedUser.role,
-			isEmailVerified: updatedUser.isEmailVerified,
-			avatar: updatedUser.avatar,
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			role: user.role,
+			isEmailVerified: user.isEmailVerified,
+			avatar: user.avatar,
 		},
 		accessToken,
 		refreshToken,
@@ -49,25 +49,39 @@ const login = catchAsync(async ({ email, password }) => {
 
 	const { accessToken, refreshToken } = signAccessAndRefreshToken(user._id);
 
-	const updatedUser = await updateUserById(user._id, {
+	await updateUserById(user._id, {
 		$push: { refreshToken },
 	});
-	console.log(updatedUser);
+
 	return {
 		user: {
-			_id: updatedUser._id,
-			name: updatedUser.name,
-			email: updatedUser.email,
-			role: updatedUser.role,
-			isEmailVerified: updatedUser.isEmailVerified,
-			avatar: updatedUser.avatar,
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			role: user.role,
+			isEmailVerified: user.isEmailVerified,
+			avatar: user.avatar,
 		},
 		accessToken,
 		refreshToken,
+	};
+});
+const logout = catchAsync(async ({ userId, token }) => {
+	const user = await findUser('id', userId);
+
+	if (!user || !user.refreshToken.includes(token)) return null;
+
+	await updateUserById(userId, {
+		$pull: { refreshToken: token },
+	});
+
+	return {
+		user,
 	};
 });
 
 module.exports = {
 	register,
 	login,
+	logout,
 };

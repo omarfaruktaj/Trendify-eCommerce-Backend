@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const middlewares = require('./middlewares');
 const appRoutes = require('./routes');
 const AppError = require('../utils/appError');
-const globalErrorHandler = require('../middlewares/globalErrorHandler');
+const { globalErrorHandler } = require('../middlewares');
 
 dotenv.config();
 
