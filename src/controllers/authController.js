@@ -52,6 +52,36 @@ const register = catchAsync(async (req, res, next) => {
 		);
 });
 
+const login = catchAsync(async (req, res, next) => {
+	const { name, email, password } = req.body;
+
+	if (!email || !password)
+		return next(new AppError('Email and password are required .'));
+
+	const { user, accessToken, refreshToken } = await authService.login({
+		name,
+		email,
+		password,
+	});
+
+	if (!user)
+		return next(
+			new AppError('Something went very wrong when log in user!', 500),
+		);
+	console.log(user);
+	sendToken(req, res, { accessToken, refreshToken });
+
+	res
+		.status(200)
+		.json(
+			new ApiResponse(
+				{ user, accessToken, refreshToken },
+				'User successfully login.',
+			),
+		);
+});
+
 module.exports = {
 	register,
+	login,
 };

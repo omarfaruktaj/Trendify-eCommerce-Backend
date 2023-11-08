@@ -12,18 +12,22 @@ const createUser = catchAsync(async ({ name, email, password }) => {
 
 const findUsers = catchAsync(async (filter) => {
 	const user = User.find({ ...filter });
-	if (user.length === 0) throw new AppError('User not found.', 404);
+
 	return user;
 });
 
-const findUser = catchAsync(async (key, value) => {
+const findUser = catchAsync(async (key, value, selectFields) => {
 	if (key === 'id') {
-		const user = await User.findById(value);
-		if (!user) throw new AppError('User not found.', 404);
+		let user = User.findById(value);
+
+		if (selectFields) user = user.select(selectFields);
+
 		return user;
 	}
-	const user = User.findOne({ [key]: value });
-	if (!user) throw new AppError('User not found.', 404);
+	let user = User.findOne({ [key]: value });
+
+	if (selectFields) user = user.select(selectFields);
+
 	return user;
 });
 
@@ -45,7 +49,7 @@ const updateUserById = catchAsync(async (id, data) => {
 
 	if (email && isEmailTaken) throw new AppError('Email is already taken.', 404);
 
-	const user = await User.findByIdAndUpdate(
+	const user = User.findByIdAndUpdate(
 		id,
 		{ ...data },
 		{ new: true, runValidators: true },

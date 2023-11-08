@@ -108,5 +108,9 @@ userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
 	return !!user;
 };
 
+userSchema.methods.isPasswordCorrect = async function (candidatePassword) {
+	return await bcrypt.compare(candidatePassword, this.password);
+};
+
 const User = mongoose.model('User', userSchema);
 module.exports = User;
