@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcrypt');
+
 const {
 	AvailableUserRoles,
 	UserRolesEnum,
@@ -30,15 +32,14 @@ const userSchema = new mongoose.Schema(
 		password: {
 			type: String,
 			trim: true,
+			select: false,
 			required: [true, 'Please provide password.'],
 			validate: {
 				validator: (value) =>
-					/^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/.test(
-						value,
-					),
+					/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$&*]).{8,}/.test(value),
+				message:
+					'Password must be at least 8 characters with at least 1 lowercase, 1 uppercase, 1 digit, and 1 special character.',
 			},
-			message:
-				'Password must have 2 uppercase, 1 special, 2 digits, 3 lowercase, and be at least 8 characters long.',
 		},
 		avatar: {
 			public_id: {
@@ -85,6 +86,27 @@ const userSchema = new mongoose.Schema(
 	},
 	{ timestamps: true },
 );
+
+userSchema.pre('save', async function (next) {
+	if (!this.isModified('password')) return next();
+
+	this.password = await bcrypt.hash(this.password, 12);
+	next();
+});
+
+userSchema.pre('save', function (next) {
+	if (!this.isModified('password') || this.isNew) return next();
+
+	this.passwordChangedAt = Date.now() - 1000;
+
+	next();
+});
+
+userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+	const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+
+	return !!user;
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

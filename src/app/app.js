@@ -14,7 +14,7 @@ const app = express();
 app.use(middlewares);
 
 //Routes
-app.use(appRoutes);
+app.use('/api/v1', appRoutes);
 
 // Check health
 app.get('/health', (_req, res, _next) => {

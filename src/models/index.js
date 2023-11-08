@@ -1,0 +1,9 @@
+exports.User = require('./userModel');
+exports.Product = require('./productModel');
+exports.Cart = require('./cartModel');
+exports.Category = require('./categoryModel');
+exports.Color = require('./colorModel');
+exports.Size = require('./sizeModel');
+exports.Review = require('./reviewModel');
+exports.Order = require('./orderModel');
+exports.Favorite = require('./favoriteMode');

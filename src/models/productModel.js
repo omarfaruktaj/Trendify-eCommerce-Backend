@@ -46,7 +46,7 @@ const productSchema = new mongoose.Schema(
 		],
 		sizes: [
 			{
-				type: mongoose.types.ObjectId,
+				type: mongoose.Types.ObjectId,
 				ref: 'Size',
 			},
 		],
