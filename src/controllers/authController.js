@@ -92,9 +92,26 @@ const logout = catchAsync(async (req, res, next) => {
 		.clearCookie('refreshToken', options)
 		.json(new ApiResponse({}, 'User successfully logout'));
 });
+const refreshAccessToken = catchAsync(async (req, res, next) => {
+	const token = req.body.refreshToken || req.cookies.refreshToken;
+
+	if (!token) return next(new AppError('Unauthorize request', 401));
+
+	const { accessToken, refreshToken } = await authService.refreshAccessToken(
+		token,
+	);
+
+	sendToken(req, res, { accessToken, refreshToken });
+	res
+		.status(200)
+		.json(
+			new ApiResponse({ accessToken, refreshToken }, 'Access token refreshed'),
+		);
+});
 
 module.exports = {
 	register,
 	login,
 	logout,
+	refreshAccessToken,
 };

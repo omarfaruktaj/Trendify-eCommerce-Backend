@@ -66,6 +66,7 @@ const login = catchAsync(async ({ email, password }) => {
 		refreshToken,
 	};
 });
+
 const logout = catchAsync(async ({ userId, token }) => {
 	const user = await findUser('id', userId);
 
@@ -80,8 +81,29 @@ const logout = catchAsync(async ({ userId, token }) => {
 	};
 });
 
+const refreshAccessToken = catchAsync(async (refreshToken) => {
+	console.log(refreshToken);
+	const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+	const user = await findUser('id', decoded.id);
+
+	if (!user || !user.refreshToken.includes(refreshToken))
+		throw new AppError('Invalid refresh Token!', 401);
+
+	const { accessToken, refreshToken: newRefreshToken } =
+		signAccessAndRefreshToken(user._id);
+
+	await updateUserById(user._id, { $pull: { refreshToken } });
+
+	return {
+		accessToken,
+		refreshToken: newRefreshToken,
+	};
+});
+
 module.exports = {
 	register,
 	login,
 	logout,
+	refreshAccessToken,
 };
