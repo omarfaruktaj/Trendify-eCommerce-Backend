@@ -58,10 +58,17 @@ const updateUserById = catchAsync(async (id, data) => {
 	return user;
 });
 
+const updateUserPassword = catchAsync(async (id, password) => {
+	const user = await User.findById(id);
+	user.password = password;
+	return await user.save();
+});
+
 module.exports = {
 	createUser,
 	findUser,
 	findUserByProperties,
 	findUsers,
 	updateUserById,
+	updateUserPassword,
 };

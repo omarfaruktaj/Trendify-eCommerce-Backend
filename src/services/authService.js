@@ -1,6 +1,11 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { createUser, updateUserById, findUser } = require('./userService');
+const {
+	createUser,
+	updateUserById,
+	findUser,
+	updateUserPassword,
+} = require('./userService');
 const jwt = require('jsonwebtoken');
 
 const signAccessAndRefreshToken = (id) => {
@@ -101,9 +106,24 @@ const refreshAccessToken = catchAsync(async (refreshToken) => {
 	};
 });
 
+const changeCurrentPassword = catchAsync(
+	async ({ userId, oldPassword, newPassword }) => {
+		const user = await findUser('id', userId, ['+password']);
+		console.log(oldPassword, user);
+		const isPasswordValid = await user.isPasswordCorrect(oldPassword);
+
+		if (!isPasswordValid) throw new AppError('Invalid old password', 400);
+
+		await updateUserPassword(userId, newPassword);
+
+		return { success: true };
+	},
+);
+
 module.exports = {
 	register,
 	login,
 	logout,
 	refreshAccessToken,
+	changeCurrentPassword,
 };

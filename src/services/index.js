@@ -4,6 +4,7 @@ const {
 	findUserByProperties,
 	findUsers,
 	updateUserById,
+	updateUserPassword,
 } = require('./userService');
 
 const {
@@ -11,6 +12,7 @@ const {
 	login,
 	logout,
 	refreshAccessToken,
+	changeCurrentPassword,
 } = require('./authService');
 
 const userService = {
@@ -19,12 +21,14 @@ const userService = {
 	findUserByProperties,
 	findUsers,
 	updateUserById,
+	updateUserPassword,
 };
 const authService = {
 	register,
 	login,
 	logout,
 	refreshAccessToken,
+	changeCurrentPassword,
 };
 
 module.exports = {

@@ -12,4 +12,6 @@ router.use(protect);
 
 router.post('/logout', authController.logout);
 
+router.post('/change-password', authController.changeCurrentPassword);
+
 module.exports = router;

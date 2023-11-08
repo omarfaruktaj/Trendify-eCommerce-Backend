@@ -51,7 +51,7 @@ const login = catchAsync(async (req, res, next) => {
 	const { email, password } = req.body;
 
 	if (!email || !password)
-		return next(new AppError('Email and password are required .'));
+		return next(new AppError('Email and password are required .', 400));
 
 	const { user, accessToken, refreshToken } = await authService.login({
 		email,
@@ -79,7 +79,9 @@ const logout = catchAsync(async (req, res, next) => {
 
 	const user = await authService.logout({ userId, token });
 
-	if (!user) return new AppError('Invalid refresh token or user not found');
+	if (!user) {
+		return next(new AppError('Invalid refresh token or user not found', 400));
+	}
 
 	const options = {
 		httpOnly: true,
@@ -108,10 +110,26 @@ const refreshAccessToken = catchAsync(async (req, res, next) => {
 			new ApiResponse({ accessToken, refreshToken }, 'Access token refreshed'),
 		);
 });
+const changeCurrentPassword = catchAsync(async (req, res, next) => {
+	const { oldPassword, newPassword } = req.body;
+	const userId = req.user._id;
+
+	if (!oldPassword || !newPassword)
+		return next(new AppError('oldPassword and newPassword are required', 400));
+
+	await authService.changeCurrentPassword({
+		userId,
+		oldPassword,
+		newPassword,
+	});
+
+	res.status(200).json(new ApiResponse({}, 'Password successfully changed.'));
+});
 
 module.exports = {
 	register,
 	login,
 	logout,
 	refreshAccessToken,
+	changeCurrentPassword,
 };
