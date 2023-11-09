@@ -1,6 +1,9 @@
+const { uploadFile, destroyFile } = require('../config/cloudinary');
 const { User } = require('../models');
+const ApiFeatures = require('../utils/APIFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const datauri = require('../utils/datauri');
 
 const createUser = catchAsync(async ({ name, email, password }) => {
 	const isEmailTaken = await User.isEmailTaken(email);
@@ -45,9 +48,9 @@ const updateUserById = catchAsync(async (id, data) => {
 			'This route is not for password updates. Please use update password option.',
 			400,
 		);
-	const isEmailTaken = User.isEmailTaken(email, id);
+	const isEmailTaken = await User.isEmailTaken(email, id);
 
-	if (email && isEmailTaken) throw new AppError('Email is already taken.', 404);
+	if (email && isEmailTaken) throw new AppError('Email is already taken.', 401);
 
 	const user = User.findByIdAndUpdate(
 		id,
@@ -64,6 +67,35 @@ const updateUserPassword = catchAsync(async (id, password) => {
 	return await user.save();
 });
 
+const updateMyAvatar = catchAsync(async (user, avatarData) => {
+	if (user.avatar.public_id) {
+		await destroyFile(user.avatar.public_id);
+	}
+
+	const folderName = `Users/avatar`;
+	const file = datauri(avatarData).content;
+	const avatar = await uploadFile(file, folderName, 600);
+
+	await User.findByIdAndUpdate(user._id, {
+		avatar: { public_id: avatar.public_id, url: avatar.secure_url },
+	});
+
+	return {
+		message: success,
+	};
+});
+
+const getAllUsers = catchAsync(async (queries) => {
+	const features = new ApiFeatures(User.find({}), queries)
+		.search()
+		.filter()
+		.sort()
+		.limitFields()
+		.paginate();
+
+	return features.query;
+});
+
 module.exports = {
 	createUser,
 	findUser,
@@ -71,4 +103,6 @@ module.exports = {
 	findUsers,
 	updateUserById,
 	updateUserPassword,
+	updateMyAvatar,
+	getAllUsers,
 };

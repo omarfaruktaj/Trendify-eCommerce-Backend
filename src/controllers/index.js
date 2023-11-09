@@ -9,6 +9,14 @@ const {
 	verifyEmail,
 } = require('./authController');
 
+const {
+	getAUser,
+	getAllUsers,
+	getMe,
+	updateMe,
+	updateMyAvatar,
+} = require('./userController');
+
 const authController = {
 	register,
 	login,
@@ -20,6 +28,14 @@ const authController = {
 	verifyEmail,
 };
 
+const userController = {
+	getAUser,
+	getAllUsers,
+	getMe,
+	updateMe,
+	updateMyAvatar,
+};
 module.exports = {
 	authController,
+	userController,
 };

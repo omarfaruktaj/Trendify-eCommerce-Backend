@@ -5,6 +5,8 @@ const {
 	findUsers,
 	updateUserById,
 	updateUserPassword,
+	updateMyAvatar,
+	getAllUsers,
 } = require('./userService');
 
 const {
@@ -25,6 +27,8 @@ const userService = {
 	findUsers,
 	updateUserById,
 	updateUserPassword,
+	updateMyAvatar,
+	getAllUsers,
 };
 const authService = {
 	register,

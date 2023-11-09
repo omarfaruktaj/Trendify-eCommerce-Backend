@@ -7,7 +7,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/refresh-token', authController.refreshAccessToken);
 router.post('/forgot-password', authController.forgotPassword);
-router.post('/reset-password/:token', authController.resetPassword);
+router.patch('/reset-password/:token', authController.resetPassword);
 router.get('/verify-email/:token', authController.verifyEmail);
 // Protected routes
 router.use(protect);
