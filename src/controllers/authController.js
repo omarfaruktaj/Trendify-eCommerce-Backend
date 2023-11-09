@@ -2,6 +2,7 @@ const { authService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
 const ApiResponse = require('../utils/apiResponse');
 const AppError = require('../utils/appError');
+const { sendVerificationEmail } = require('../utils/email');
 
 const sendToken = (req, res, token) => {
 	res
@@ -29,12 +30,21 @@ const register = catchAsync(async (req, res, next) => {
 	if (!name || !email || !password)
 		return next(new AppError('Name, email, and password are required .'));
 
-	const { user, accessToken, refreshToken } = await authService.register({
-		name,
-		email,
-		password,
-	});
+	const { user, accessToken, refreshToken, verificationToken } =
+		await authService.register({
+			name,
+			email,
+			password,
+		});
 
+	const verificationUrl = `${req.protocol}://${req.get(
+		'host',
+	)}api/v1/auth/verify-email/${verificationToken}`;
+
+	// send email verification email
+	sendVerificationEmail(user.name, user.email, verificationUrl);
+
+	// set token in cookie
 	sendToken(req, res, { accessToken, refreshToken });
 
 	res
@@ -42,7 +52,7 @@ const register = catchAsync(async (req, res, next) => {
 		.json(
 			new ApiResponse(
 				{ user, accessToken, refreshToken },
-				'User successfully registered.',
+				'User successfully registered.Email verification email sent your email. Please verify your email',
 			),
 		);
 });
@@ -167,6 +177,15 @@ const resetPassword = catchAsync(async (req, res, next) => {
 			),
 		);
 });
+const verifyEmail = catchAsync(async (req, res, next) => {
+	const token = req.params.token;
+
+	if (!token) return next(new AppError('Invalid request', 400));
+
+	await authService.verifyEmail(token);
+
+	res.status(200).json(new ApiResponse({}, 'Email successfully verified.'));
+});
 
 module.exports = {
 	register,
@@ -176,4 +195,5 @@ module.exports = {
 	changeCurrentPassword,
 	forgotPassword,
 	resetPassword,
+	verifyEmail,
 };

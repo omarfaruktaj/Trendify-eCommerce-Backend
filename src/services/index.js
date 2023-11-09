@@ -15,6 +15,7 @@ const {
 	changeCurrentPassword,
 	forgotPassword,
 	resetPassword,
+	verifyEmail,
 } = require('./authService');
 
 const userService = {
@@ -33,6 +34,7 @@ const authService = {
 	changeCurrentPassword,
 	forgotPassword,
 	resetPassword,
+	verifyEmail,
 };
 
 module.exports = {

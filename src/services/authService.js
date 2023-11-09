@@ -1,6 +1,9 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { sendPasswordResetToken } = require('../utils/email');
+const {
+	sendPasswordResetToken,
+	sendVerificationEmail,
+} = require('../utils/email');
 const crypto = require('crypto');
 const {
 	createUser,
@@ -34,6 +37,8 @@ const register = catchAsync(async ({ name, email, password }) => {
 	await updateUserById(user._id, {
 		$push: { refreshToken },
 	});
+	const verificationToken = await user.createEmailVerificationToken();
+	await user.save();
 
 	return {
 		user: {
@@ -46,6 +51,7 @@ const register = catchAsync(async ({ name, email, password }) => {
 		},
 		accessToken,
 		refreshToken,
+		verificationToken,
 	};
 });
 
@@ -136,7 +142,7 @@ const forgotPassword = catchAsync(async ({ email, protocol, host }) => {
 
 	try {
 		const resetUrl = `${protocol}://${host}/api/v1/auth/reset-password/${resetToken}`;
-		console.log(resetUrl);
+
 		await sendPasswordResetToken(firstName, user.email, resetUrl);
 
 		return {
@@ -188,6 +194,26 @@ const resetPassword = catchAsync(async (newPassword, token) => {
 		refreshToken,
 	};
 });
+const verifyEmail = catchAsync(async (token) => {
+	const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+	const user = await findUserByProperties({
+		emailVerificationToken: hashedToken,
+		emailVerificationExpire: { $gt: Date.now() },
+	});
+
+	if (!user) throw new AppError('Token is invalid or expired', 400);
+
+	await updateUserById(user._id, {
+		isEmailVerified: true,
+		emailVerificationToken: undefined,
+		emailVerificationExpire: undefined,
+	});
+
+	return {
+		success: true,
+	};
+});
 
 module.exports = {
 	register,
@@ -197,4 +223,5 @@ module.exports = {
 	changeCurrentPassword,
 	forgotPassword,
 	resetPassword,
+	verifyEmail,
 };

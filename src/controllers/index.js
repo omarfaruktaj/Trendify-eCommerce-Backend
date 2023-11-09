@@ -6,6 +6,7 @@ const {
 	changeCurrentPassword,
 	forgotPassword,
 	resetPassword,
+	verifyEmail,
 } = require('./authController');
 
 const authController = {
@@ -16,6 +17,7 @@ const authController = {
 	changeCurrentPassword,
 	forgotPassword,
 	resetPassword,
+	verifyEmail,
 };
 
 module.exports = {
