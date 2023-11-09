@@ -125,6 +125,48 @@ const changeCurrentPassword = catchAsync(async (req, res, next) => {
 
 	res.status(200).json(new ApiResponse({}, 'Password successfully changed.'));
 });
+const forgotPassword = catchAsync(async (req, res, next) => {
+	const { email } = req.body;
+
+	if (!email) return next(new AppError('Email is required', 400));
+
+	const protocol = req.protocol;
+	const host = req.get('host');
+
+	await authService.forgotPassword({ email, protocol, host });
+
+	res
+		.status(200)
+		.json(
+			new ApiResponse(
+				{},
+				'Password reset token sent your email. Please check your email',
+			),
+		);
+});
+const resetPassword = catchAsync(async (req, res, next) => {
+	const { password } = req.body;
+	const token = req.params.token;
+
+	if (!password || !token)
+		return next(new AppError('Token and password are required', 400));
+
+	const { user, accessToken, refreshToken } = await authService.resetPassword(
+		password,
+		token,
+	);
+
+	sendToken(req, res, { accessToken, refreshToken });
+
+	res
+		.status(200)
+		.json(
+			new ApiResponse(
+				{ user, accessToken, refreshToken },
+				'Password successfully reset',
+			),
+		);
+});
 
 module.exports = {
 	register,
@@ -132,4 +174,6 @@ module.exports = {
 	logout,
 	refreshAccessToken,
 	changeCurrentPassword,
+	forgotPassword,
+	resetPassword,
 };

@@ -13,6 +13,8 @@ const {
 	logout,
 	refreshAccessToken,
 	changeCurrentPassword,
+	forgotPassword,
+	resetPassword,
 } = require('./authService');
 
 const userService = {
@@ -29,6 +31,8 @@ const authService = {
 	logout,
 	refreshAccessToken,
 	changeCurrentPassword,
+	forgotPassword,
+	resetPassword,
 };
 
 module.exports = {

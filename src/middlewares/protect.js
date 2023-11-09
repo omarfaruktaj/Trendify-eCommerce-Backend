@@ -5,7 +5,7 @@ const { userService } = require('../services');
 
 const protect = catchAsync(async (req, res, next) => {
 	let token;
-
+	
 	if (
 		req.headers.authorization &&
 		req.headers.authorization.startsWith('Bearer')

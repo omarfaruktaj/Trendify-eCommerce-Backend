@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const {
 	AvailableUserRoles,
@@ -74,13 +75,13 @@ const userSchema = new mongoose.Schema(
 		passwordResetToken: {
 			type: String,
 		},
-		passWordResetTokenExpire: {
+		passwordResetTokenExpire: {
 			type: Date,
 		},
 		emailVerificationToken: {
 			type: String,
 		},
-		emailVerificationTokenExpire: {
+		emailVerificationExpire: {
 			type: Date,
 		},
 	},
@@ -120,6 +121,19 @@ userSchema.methods.passwordChangeAfter = function (jwtTimestamp) {
 		return jwtTimestamp < changedTimestamp;
 	}
 	return false;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+	const resetToken = crypto.randomBytes(64).toString('hex');
+
+	this.passwordResetToken = crypto
+		.createHash('sha256')
+		.update(resetToken)
+		.digest('hex');
+
+	this.passwordResetTokenExpire = Date.now() + 10 * 60 * 1000;
+
+	return resetToken;
 };
 
 const User = mongoose.model('User', userSchema);

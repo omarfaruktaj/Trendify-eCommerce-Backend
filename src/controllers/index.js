@@ -4,6 +4,8 @@ const {
 	logout,
 	refreshAccessToken,
 	changeCurrentPassword,
+	forgotPassword,
+	resetPassword,
 } = require('./authController');
 
 const authController = {
@@ -12,6 +14,8 @@ const authController = {
 	logout,
 	refreshAccessToken,
 	changeCurrentPassword,
+	forgotPassword,
+	resetPassword,
 };
 
 module.exports = {
