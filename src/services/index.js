@@ -7,6 +7,9 @@ const {
 	updateUserPassword,
 	updateMyAvatar,
 	getAllUsers,
+	deleteAUser,
+	deleteMe,
+	assignRole,
 } = require('./userService');
 
 const {
@@ -29,6 +32,9 @@ const userService = {
 	updateUserPassword,
 	updateMyAvatar,
 	getAllUsers,
+	deleteAUser,
+	deleteMe,
+	assignRole,
 };
 const authService = {
 	register,

@@ -6,6 +6,7 @@ const validatePermission = (...roles) => {
 			return next(
 				new AppError(
 					`Role: ${req.user.role} is not allowed to access this resource.`,
+					401,
 				),
 			);
 		return next();

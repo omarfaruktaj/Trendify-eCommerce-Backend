@@ -96,6 +96,52 @@ const getAllUsers = catchAsync(async (queries) => {
 	return features.query;
 });
 
+const deleteMe = catchAsync(async (userId, password) => {
+	const user = await User.findById(userId).select('+password');
+
+	const isPasswordCorrect = await user.isPasswordCorrect(password);
+
+	if (!isPasswordCorrect) throw new AppError('Invalid password', 400);
+
+	const avatarId = user.avatar.public_id;
+
+	if (avatarId) {
+		await destroyFile(avatarId);
+	}
+
+	const deletedUser = await User.findByIdAndDelete(user._id);
+
+	return deletedUser;
+});
+
+const deleteAUser = catchAsync(async (userId) => {
+	const user = await User.findById(userId);
+
+	if (!user) throw new AppError('No user found with this Id,', 400);
+
+	const avatarId = user.avatar.public_id;
+
+	if (avatarId) {
+		await destroyFile(avatarId);
+	}
+
+	const deletedUser = await User.findByIdAndDelete(user._id);
+
+	return deletedUser;
+});
+
+const assignRole = catchAsync(async (userId, role) => {
+	const user = await User.findById(userId);
+
+	if (!user) throw new AppError('No user found with this Id,', 400);
+
+	user.role = role;
+
+	const updatedUser = await user.save();
+
+	return updatedUser;
+});
+
 module.exports = {
 	createUser,
 	findUser,
@@ -105,4 +151,7 @@ module.exports = {
 	updateUserPassword,
 	updateMyAvatar,
 	getAllUsers,
+	deleteMe,
+	deleteAUser,
+	assignRole,
 };

@@ -15,6 +15,9 @@ const {
 	getMe,
 	updateMe,
 	updateMyAvatar,
+	assignRole,
+	deleteAUser,
+	deleteMe,
 } = require('./userController');
 
 const authController = {
@@ -34,6 +37,9 @@ const userController = {
 	getMe,
 	updateMe,
 	updateMyAvatar,
+	assignRole,
+	deleteAUser,
+	deleteMe,
 };
 module.exports = {
 	authController,

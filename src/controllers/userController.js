@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const { userService } = require('../services');
 const ApiResponse = require('../utils/apiResponse');
+const AppError = require('../utils/appError');
 
 const filterObj = (obj, ...allowedFields) => {
 	const newObj = {};
@@ -60,14 +61,46 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 		.status(200)
 		.json(new ApiResponse({ users }, 'Avatar successfully updated.'));
 });
+
 const getAUser = catchAsync(async (req, res, next) => {
 	const userId = req.params.id;
 
-	const users = await userService.findUser('id', userId);
+	const user = await userService.findUser('id', userId);
+
+	if (!user) return next(new AppError('No user found with this id.', 400));
+
+	res.status(200).json(new ApiResponse({ user }, 'get user successfully'));
+});
+
+const deleteMe = catchAsync(async (req, res, next) => {
+	const userId = req.user._id;
+	const password = req.body.password;
+
+	const users = await userService.deleteMe(userId, password);
 
 	res
 		.status(200)
-		.json(new ApiResponse({ users }, 'Avatar successfully updated.'));
+		.json(new ApiResponse({ users }, 'Your account successfully deleted.'));
+});
+
+const deleteAUser = catchAsync(async (req, res, next) => {
+	const userId = req.params.id;
+
+	const users = await userService.deleteAUser(userId);
+
+	res
+		.status(200)
+		.json(new ApiResponse({ users }, 'User successfully deleted.'));
+});
+const assignRole = catchAsync(async (req, res, next) => {
+	const userId = req.params.id;
+	const role = req.body.role;
+
+	const users = await userService.assignRole(userId, role);
+
+	res
+		.status(200)
+		.json(new ApiResponse({ users }, 'User role successfully updated.'));
 });
 
 module.exports = {
@@ -76,4 +109,7 @@ module.exports = {
 	getMe,
 	getAUser,
 	getAllUsers,
+	deleteMe,
+	deleteAUser,
+	assignRole,
 };
