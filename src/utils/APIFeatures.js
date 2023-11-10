@@ -1,10 +1,11 @@
 class ApiFeatures {
 	constructor(query, queryString) {
 		this.query = query;
-		this.queryString = queryString;
+		this.queryString = queryString || {};
 	}
+
 	search() {
-		if (this.queryString.keyword) {
+		if (this.query && this.queryString.keyword) {
 			this.query = this.query.find({
 				name: { $regex: this.queryString.keyword, $options: 'i' },
 			});

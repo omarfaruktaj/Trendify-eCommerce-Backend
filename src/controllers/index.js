@@ -20,6 +20,16 @@ const {
 	deleteMe,
 } = require('./userController');
 
+const {
+	createProduct,
+	deleteProduct,
+	getAllProducts,
+	getProductById,
+	getProductBySlug,
+	updateProduct,
+	updateProductImage,
+} = require('./productController');
+
 const authController = {
 	register,
 	login,
@@ -41,7 +51,19 @@ const userController = {
 	deleteAUser,
 	deleteMe,
 };
+
+const productController = {
+	createProduct,
+	deleteProduct,
+	getAllProducts,
+	getProductById,
+	getProductBySlug,
+	updateProduct,
+	updateProductImage,
+};
+
 module.exports = {
 	authController,
 	userController,
+	productController,
 };

@@ -23,6 +23,15 @@ const {
 	verifyEmail,
 } = require('./authService');
 
+const {
+	createProduct,
+	deleteProduct,
+	getAProduct,
+	getAllProducts,
+	updateProduct,
+	updateProductImages,
+} = require('./productService');
+
 const userService = {
 	createUser,
 	findUser,
@@ -47,7 +56,17 @@ const authService = {
 	verifyEmail,
 };
 
+const productService = {
+	createProduct,
+	deleteProduct,
+	getAProduct,
+	getAllProducts,
+	updateProduct,
+	updateProductImages,
+};
+
 module.exports = {
 	userService,
 	authService,
+	productService,
 };

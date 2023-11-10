@@ -96,5 +96,22 @@ const productSchema = new mongoose.Schema(
 	{ timestamps: true },
 );
 
+productSchema.index({ name: true, slug: true });
+
+productSchema.virtual('reviews', {
+	ref: 'Review',
+	localField: '_id',
+	foreignField: 'product',
+});
+
+productSchema.pre(/^find/, function (next) {
+	const populateQuery = [
+		{ path: 'colors', select: 'color colorCode' },
+		{ path: 'sizes', select: 'size' },
+	];
+	this.populate(populateQuery);
+
+	next();
+});
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

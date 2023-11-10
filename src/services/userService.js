@@ -1,6 +1,6 @@
 const { uploadFile, destroyFile } = require('../config/cloudinary');
 const { User } = require('../models');
-const ApiFeatures = require('../utils/APIFeatures');
+const ApiFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const datauri = require('../utils/datauri');
