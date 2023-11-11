@@ -12,6 +12,9 @@ const {
 	assignRole,
 } = require('./userService');
 
+const { createColor, getAllColors, updateAColor } = require('./colorService');
+const { createSize, getAllSizes, updateASize } = require('./sizeService');
+
 const {
 	register,
 	login,
@@ -83,9 +86,23 @@ const reviewService = {
 	updateReview,
 };
 
+const colorService = {
+	createColor,
+	getAllColors,
+	updateAColor,
+};
+
+const sizeService = {
+	createSize,
+	getAllSizes,
+	updateASize,
+};
+
 module.exports = {
 	userService,
 	authService,
 	productService,
 	reviewService,
+	colorService,
+	sizeService,
 };

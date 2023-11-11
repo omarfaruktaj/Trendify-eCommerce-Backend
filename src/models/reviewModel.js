@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { productService } = require('../services');
+const { updateProductInternal } = require('../services/productService');
 
 const reviewSchema = new mongoose.Schema(
 	{
@@ -44,12 +44,12 @@ reviewSchema.statics.calcAverageRatings = async function (productId) {
 	]);
 
 	if (stats.length > 0) {
-		await productService.updateProductInternal(productId, {
+		await updateProductInternal(productId, {
 			ratingsQuantity: stats[0].nRating,
 			ratingsAverage: stats[0].avgRating,
 		});
 	} else {
-		await productService.updateProductInternal(productId, {
+		await updateProductInternal(productId, {
 			ratingQuantity: 0,
 			ratingsAverage: 4.5,
 		});

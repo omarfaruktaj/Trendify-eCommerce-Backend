@@ -73,7 +73,6 @@ const updateProduct = catchAsync(async (req, res, next) => {
 		name,
 		slug,
 		description,
-		images,
 		colors,
 		sizes,
 		price,
@@ -102,7 +101,7 @@ const updateProductImage = catchAsync(async (req, res, next) => {
 		.json(new ApiResponse({ product }, 'Product images successfully updated.'));
 });
 
-const getAllProducts = catchAsync(async (_req, res, _next) => {
+const getAllProducts = catchAsync(async (req, res, _next) => {
 	const query = req.query;
 
 	const products = await productService.getAllProducts(query);

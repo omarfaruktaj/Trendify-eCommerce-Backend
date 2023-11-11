@@ -1,9 +1,6 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const {
-	sendPasswordResetToken,
-	sendVerificationEmail,
-} = require('../utils/email');
+const { sendPasswordResetToken } = require('../utils/email');
 const crypto = require('crypto');
 const {
 	createUser,

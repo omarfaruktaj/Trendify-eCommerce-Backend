@@ -124,7 +124,7 @@ const updateProduct = catchAsync(
 );
 
 const updateProductInternal = (productId, fields) => {
-	return Product.findByIdAndUpdate(productId, { fields });
+	return Product.findByIdAndUpdate(productId, { ...fields });
 };
 
 const updateProductImages = catchAsync(async (productId, images) => {

@@ -38,6 +38,9 @@ const {
 	updateReview,
 } = require('./reviewController');
 
+const { getAllColor, createColor, updateColor } = require('./colorController');
+const { getAllSize, createSize, updateSize } = require('./sizeController');
+
 const authController = {
 	register,
 	login,
@@ -78,9 +81,23 @@ const reviewController = {
 	updateReview,
 };
 
+const colorController = {
+	getAllColor,
+	createColor,
+	updateColor,
+};
+
+const sizeController = {
+	getAllSize,
+	createSize,
+	updateSize,
+};
+
 module.exports = {
 	authController,
 	userController,
 	productController,
 	reviewController,
+	colorController,
+	sizeController,
 };
