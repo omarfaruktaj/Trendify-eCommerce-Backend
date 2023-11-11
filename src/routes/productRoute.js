@@ -2,6 +2,9 @@ const router = require('express').Router();
 
 const { productController } = require('../controllers');
 const { protect, validatePermission } = require('../middlewares');
+const reviewRoute = require('./reviewRoute');
+
+router.use('/:productId/reviews', reviewRoute);
 
 router.get('/s/:slug', productController.getProductBySlug);
 

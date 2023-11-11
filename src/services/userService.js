@@ -81,7 +81,7 @@ const updateMyAvatar = catchAsync(async (user, avatarData) => {
 	});
 
 	return {
-		message: success,
+		success: true,
 	};
 });
 

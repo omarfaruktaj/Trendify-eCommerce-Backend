@@ -103,7 +103,9 @@ const updateProductImage = catchAsync(async (req, res, next) => {
 });
 
 const getAllProducts = catchAsync(async (_req, res, _next) => {
-	const products = await productService.getAllProducts();
+	const query = req.query;
+
+	const products = await productService.getAllProducts(query);
 
 	res
 		.status(200)

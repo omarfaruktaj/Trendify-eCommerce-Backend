@@ -5,8 +5,8 @@ const ApiFeatures = require('../utils/apiFeatures');
 const { uploadFile, destroyFile } = require('../config/cloudinary');
 const dataUri = require('../utils/datauri');
 
-const getAllProducts = () => {
-	const features = new ApiFeatures(Product.find({}))
+const getAllProducts = (query) => {
+	const features = new ApiFeatures(Product.find({}), query)
 		.search()
 		.filter()
 		.limitFields()
@@ -103,6 +103,7 @@ const updateProduct = catchAsync(
 		}
 
 		return Product.findByIdAndUpdate(
+			productId,
 			{
 				name,
 				slug,
@@ -121,6 +122,10 @@ const updateProduct = catchAsync(
 		);
 	},
 );
+
+const updateProductInternal = (productId, fields) => {
+	return Product.findByIdAndUpdate(productId, { fields });
+};
 
 const updateProductImages = catchAsync(async (productId, images) => {
 	const product = await Product.findById(productId);
@@ -162,4 +167,5 @@ module.exports = {
 	updateProduct,
 	updateProductImages,
 	deleteProduct,
+	updateProductInternal,
 };

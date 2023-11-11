@@ -30,7 +30,16 @@ const {
 	getAllProducts,
 	updateProduct,
 	updateProductImages,
+	updateProductInternal,
 } = require('./productService');
+
+const {
+	createReview,
+	deleteReview,
+	getAReviewById,
+	getAllReviews,
+	updateReview,
+} = require('./reviewService');
 
 const userService = {
 	createUser,
@@ -63,10 +72,20 @@ const productService = {
 	getAllProducts,
 	updateProduct,
 	updateProductImages,
+	updateProductInternal,
+};
+
+const reviewService = {
+	createReview,
+	deleteReview,
+	getAReviewById,
+	getAllReviews,
+	updateReview,
 };
 
 module.exports = {
 	userService,
 	authService,
 	productService,
+	reviewService,
 };

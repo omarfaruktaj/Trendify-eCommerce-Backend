@@ -30,6 +30,14 @@ const {
 	updateProductImage,
 } = require('./productController');
 
+const {
+	createReview,
+	deleteReview,
+	getAReview,
+	getAllReviews,
+	updateReview,
+} = require('./reviewController');
+
 const authController = {
 	register,
 	login,
@@ -62,8 +70,17 @@ const productController = {
 	updateProductImage,
 };
 
+const reviewController = {
+	createReview,
+	deleteReview,
+	getAReview,
+	getAllReviews,
+	updateReview,
+};
+
 module.exports = {
 	authController,
 	userController,
 	productController,
+	reviewController,
 };
