@@ -41,6 +41,15 @@ const {
 const { getAllColor, createColor, updateColor } = require('./colorController');
 const { getAllSize, createSize, updateSize } = require('./sizeController');
 
+const {
+	addProductToCart,
+	decreaseByOne,
+	deleteCart,
+	deleteItem,
+	getCart,
+	increaseByOne,
+} = require('./cartController');
+
 const authController = {
 	register,
 	login,
@@ -92,7 +101,14 @@ const sizeController = {
 	createSize,
 	updateSize,
 };
-
+const cartController = {
+	addProductToCart,
+	decreaseByOne,
+	deleteCart,
+	deleteItem,
+	getCart,
+	increaseByOne,
+};
 module.exports = {
 	authController,
 	userController,
@@ -100,4 +116,5 @@ module.exports = {
 	reviewController,
 	colorController,
 	sizeController,
+	cartController,
 };

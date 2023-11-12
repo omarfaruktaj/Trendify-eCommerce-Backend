@@ -44,6 +44,15 @@ const {
 	updateReview,
 } = require('./reviewService');
 
+const {
+	addProductToCart,
+	decreaseByOne,
+	deleteCart,
+	deleteItem,
+	getCart,
+	increaseByOne,
+} = require('./cartService');
+
 const userService = {
 	createUser,
 	findUser,
@@ -98,6 +107,15 @@ const sizeService = {
 	updateASize,
 };
 
+const cartService = {
+	addProductToCart,
+	decreaseByOne,
+	deleteCart,
+	deleteItem,
+	getCart,
+	increaseByOne,
+};
+
 module.exports = {
 	userService,
 	authService,
@@ -105,4 +123,5 @@ module.exports = {
 	reviewService,
 	colorService,
 	sizeService,
+	cartService,
 };
