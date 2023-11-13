@@ -20,6 +20,12 @@ const OrderStatusEnum = {
 	Cancelled: 'Cancelled',
 };
 const AvailableOrderStatuses = Object.values(OrderStatusEnum);
+
+const paymentMethodEnum = {
+	Cash: 'Cash',
+	Stripe: 'Stripe',
+};
+const AvailablePaymentMethods = Object.values(paymentMethodEnum);
 module.exports = {
 	UserRolesEnum,
 	AvailableUserRoles,
@@ -27,4 +33,6 @@ module.exports = {
 	AvailableLoginTypes,
 	OrderStatusEnum,
 	AvailableOrderStatuses,
+	paymentMethodEnum,
+	AvailablePaymentMethods,
 };

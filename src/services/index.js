@@ -53,6 +53,22 @@ const {
 	increaseByOne,
 } = require('./cartService');
 
+const {
+	addFavoriteProduct,
+	checkProductInFavoriteList,
+	deleteProductFromFavorite,
+	getFavoriteList,
+} = require('./favoriteService');
+
+const {
+	createOrder,
+	getAOrder,
+	getAllOrders,
+	getMyOrders,
+	orderStatus,
+	cancelOrder,
+} = require('./orderService');
+
 const userService = {
 	createUser,
 	findUser,
@@ -116,6 +132,22 @@ const cartService = {
 	increaseByOne,
 };
 
+const favoriteService = {
+	addFavoriteProduct,
+	checkProductInFavoriteList,
+	deleteProductFromFavorite,
+	getFavoriteList,
+};
+
+const orderService = {
+	cancelOrder,
+	createOrder,
+	getAOrder,
+	getAllOrders,
+	getMyOrders,
+	orderStatus,
+};
+
 module.exports = {
 	userService,
 	authService,
@@ -124,4 +156,6 @@ module.exports = {
 	colorService,
 	sizeService,
 	cartService,
+	favoriteService,
+	orderService,
 };

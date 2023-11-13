@@ -18,5 +18,10 @@ const favoriteSchema = new mongoose.Schema(
 	{ timestamps: true },
 );
 
+favoriteSchema.pre(/^find/, function (next) {
+	this.populate('products').execPopulate();
+	next();
+});
+
 const Favorite = mongoose.model('Favorite', favoriteSchema);
 module.exports = Favorite;

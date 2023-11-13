@@ -50,6 +50,22 @@ const {
 	increaseByOne,
 } = require('./cartController');
 
+const {
+	addFavoriteProduct,
+	checkProductInFavoriteList,
+	deleteProductFromFavorite,
+	getFavoriteList,
+} = require('./favoriteController');
+
+const {
+	createOrder,
+	getAOrder,
+	getAllOrders,
+	getMyOrders,
+	orderStatus,
+	cancelOrder,
+} = require('./orderController');
+
 const authController = {
 	register,
 	login,
@@ -109,6 +125,22 @@ const cartController = {
 	getCart,
 	increaseByOne,
 };
+
+const favoriteController = {
+	addFavoriteProduct,
+	checkProductInFavoriteList,
+	deleteProductFromFavorite,
+	getFavoriteList,
+};
+
+const orderController = {
+	createOrder,
+	getAOrder,
+	getAllOrders,
+	getMyOrders,
+	orderStatus,
+	cancelOrder,
+};
 module.exports = {
 	authController,
 	userController,
@@ -117,4 +149,6 @@ module.exports = {
 	colorController,
 	sizeController,
 	cartController,
+	favoriteController,
+	orderController,
 };

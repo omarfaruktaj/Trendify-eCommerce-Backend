@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
-const { OrderStatusEnum, AvailableOrderStatuses } = require('../constants');
+const {
+	OrderStatusEnum,
+	AvailableOrderStatuses,
+	AvailablePaymentMethods,
+} = require('../constants');
 
 const orderSchema = new mongoose.Schema(
 	{
@@ -18,10 +22,12 @@ const orderSchema = new mongoose.Schema(
 		},
 		paymentMethod: {
 			type: String,
+			enum: AvailablePaymentMethods,
 			required: true,
 		},
 		paymentStripeId: {
 			type: String,
+			select: false,
 		},
 		textPrice: {
 			type: Number,
