@@ -18,7 +18,7 @@ const protect = catchAsync(async (req, res, next) => {
 	if (!token)
 		return next(new AppError('You are not login! Please login to access', 401));
 
-	const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+	const decoded =  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
 	const currentUser = await userService.findUser('id', decoded.id);
 

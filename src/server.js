@@ -20,5 +20,6 @@ const startServer = () => {
 		startServer();
 	} catch (error) {
 		console.log('Database connection error:', error);
+		process.exit(1)
 	}
 })();

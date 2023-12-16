@@ -93,10 +93,11 @@ const logout = catchAsync(async ({ userId, token }) => {
 });
 
 const refreshAccessToken = catchAsync(async (refreshToken) => {
-	console.log(refreshToken);
 	const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+	console.log(decoded.iat)
 
 	const user = await findUser('id', decoded.id);
+	console.log(user.refreshToken.includes(refreshToken))
 
 	if (!user || !user.refreshToken.includes(refreshToken))
 		throw new AppError('Invalid refresh Token!', 401);
@@ -105,10 +106,13 @@ const refreshAccessToken = catchAsync(async (refreshToken) => {
 		signAccessAndRefreshToken(user._id);
 
 	await updateUserById(user._id, { $pull: { refreshToken } });
+	await updateUserById(user._id, {  $push:{refreshToken: newRefreshToken} });
 
 	return {
 		accessToken,
+		user,
 		refreshToken: newRefreshToken,
+		
 	};
 });
 
@@ -126,7 +130,7 @@ const changeCurrentPassword = catchAsync(
 	},
 );
 
-const forgotPassword = catchAsync(async ({ email, protocol, host }) => {
+const forgotPassword = catchAsync(async ({ email }) => {
 	const user = await findUser('email', email);
 
 	if (!user) throw new AppError('No user found with this email.', 400);
@@ -138,7 +142,7 @@ const forgotPassword = catchAsync(async ({ email, protocol, host }) => {
 	console.log(resetToken, user);
 
 	try {
-		const resetUrl = `${protocol}://${host}/api/v1/auth/reset-password/${resetToken}`;
+		const resetUrl = `${process.env.RESET_TOKEN_URL}/${resetToken}`;
 
 		await sendPasswordResetToken(firstName, user.email, resetUrl);
 
